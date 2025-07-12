@@ -3,24 +3,37 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Malla Curricular ICI</title>
+  <title>Malla Curricular Ingeniería Civil Industrial - Universidad de La Serena </title>
   <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
   <h1>Malla Curricular - Ingeniería Civil Industrial</h1>
-  <div class="malla">
+  <div class="malla-grid">
+     <div class="semestre" id="sem1">
+       <h2>1°Semetre</h2>
+       <div class="ramo" id="calculo1" onclink="aprobar('calculo1')">Cálculo Diferencial </div>
+       <div class="ramo" id="algebra1" onclink="aprobar('algebra1')">Álgebra </div>
+       <div class="ramo" id="quimica1" onclink="aprobar('quimica1')">Química General </div>
+       <div class="ramo" id="intro" onclink="aprobar('intro')">Indroducción a la Ingeniería Civil Industrial </div>
+       <div class="ramo" id="taller1" onclink="aprobar('taller1')">Taller de Estrategias de Aprendizaje para Ingenieros </div>
+    </div>
 
-    <!-- 1° Semestre -->
-    <section class="semestre" id="semestre-1">
-      <h2>1° Semestre</h2>
-      <div class="asignatura" data-area="Ciencias Básicas"><h3>Cálculo Diferencial</h3></div>
-      <div class="asignatura" data-area="Ciencias Básicas"><h3>Álgebra</h3></div>
-      <div class="asignatura" data-area="Ciencias Básicas"><h3>Química General</h3></div>
-      <div class="asignatura" data-area="Ciencias de la Ingeniería"><h3>Introducción a la Ingeniería Civil Industrial</h3></div>
-      <div class="asignatura" data-area="Ciencias Sociales y Humanidades"><h3>Taller de Estrategias de Aprendizaje para Ingenieros</h3></div>
-    </section>
+     <div class="semestre" id="sem2">
+       <h2>2°Semetre</h2>
+       <div class="ramo bloqueado" id="calculo2" onclink="aprobar('calculo2')">Cálculo Integral </div>  
+       <div class="ramo bloqueado" id="algebra2" onclink="aprobar('algebra2')">Álgebra Lineal </div>
+       <div class="ramo bloqueado" id="fisica" onclink="aprobar('fisica')">Física Newtoniana para Ingenieros </div>
+       <div class="ramo" id="filosofia" onclink="aprobar('filosofia')">Filosofía de las Ciencias de la Ingeniería </div>
+   </div>
 
-  </div>
-  <script src="script.js"></script>
-</body>
-</html>
+     <div class="semestre" id="sem2">
+       <h2>3°Semetre</h2>
+       <div class="ramo bloqueado" id="calculo3" onclink="aprobar('calculo3')">Cálculo Vectorial </div> 
+       <div class="ramo bloqueado" id="ecuaciones" onclink="aprobar('ecuaciones')">Ecuaciones Diferenciales </div> 
+       <div class="ramo bloqueado" id="dibujo" onclink="aprobar('dibujo')">Dibujo de Ingeniería </div> 
+
+
+
+
+
+       
