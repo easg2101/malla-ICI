@@ -1,0 +1,5 @@
+document.querySelectorAll(".asignatura").forEach(asignatura => {
+  asignatura.addEventListener("click", () => {
+    asignatura.classList.toggle("aprobada");
+  });
+});
