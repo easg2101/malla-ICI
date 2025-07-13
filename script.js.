@@ -1,5 +1,218 @@
-document.querySelectorAll(".asignatura").forEach(asignatura => {
-  asignatura.addEventListener("click", () => {
-    asignatura.classList.toggle("aprobada");
+// Créditos oficiales de cada ramo
+const creditos ={
+'calculo1': 10,
+'algebra1': 8,
+'quimica1': 8,
+'intro': 2,
+'taller1': 2,
+'calculo2': 8,
+'algebra2': 7,
+'fisica': 10,
+'filosofia': 5,
+'calculo3': 8,
+'ecuaciones': 7,
+'dibujo': 5,
+'fundamento': 6,
+'taller2': 4,
+'termo': 5,
+'estad': 6,
+'electro': 9,
+'meca1': 7,
+'taller3': 3,
+'metodo': 7,
+'ing1': 5,
+'optica': 5,
+'meca2': 8,
+'ingles1': 5,
+'meca3': 7,
+'funda': 5,
+'analisis': 7,
+'invetg': 6,
+'ingles2': 5,
+'tecg': 5,
+'admi': 5,
+'conta': 5,
+'modelo': 5,
+'mk': 5,
+'ingles3': 5,
+'ing2': 5,
+'taller4': 5,
+'pp': 5,
+'producion': 5,
+'gestion1': 5,
+'ingles4': 5,
+'teoria': 5,
+'taller5': 5,
+'eva': 5,
+'procesos': 5,
+'gestion2': 5,
+'derecho': 5,
+'sistema': 5,
+'taller6': 5,
+'gestion3': 5,
+'gestion4': 5,
+'direc': 5,
+'pr': 5,
+'proyecto1': 20,
+'elec1': 5,
+'elec2': 5,
+'proyecto2': 20,
+'elec3': 5,
+'elec4': 5,
+}; 
+
+//Prerrequisitos de cada ramo(ramos que deben estar aprobados para desbloquear este)
+const prerequitos = {
+'calculo2': ['calculo1'],
+'algebra2': ['algebra1'],
+'fisica': ['calculo1'],
+'filosofia': [],
+'calculo3': ['calculo2', 'algebra2'],
+'ecuaciones': ['calculo2'],
+'dibujo': ['calculo1', 'algebra1', 'quimica1', 'intro',' taller1'],
+'fundamento': ['algebra2'],
+'taller2': ['filosofia'],
+'termo': ['ecuaciones'],
+'estad': ['calculo2'],
+'electro': ['fisica', 'calculo3'],
+'meca1': ['fisica', 'calculo3'],
+'taller3':['intro'] ,
+'metodo': ['ecuaciones'],
+'ing1': ['fisica'],
+'optica': ['electro'], 
+'meca2': ['meca1'],
+'ingles1': ['termo', 'estad', 'electro', 'meca1', 'taller3'],
+'meca3': ['termo', 'meca2'],
+'funda': ['termo', 'estad', 'electro', 'meca1', 'taller3'],
+'analisis': ['estad'],
+'invetg': ['calculo2', 'fundamento'],
+'ingles2': ['ingles1'],
+'tecg': ['fundamento'],
+'admi': ['funda'],
+'conta': ['termo', 'estad', 'electro', 'meca1', 'taller3'],
+'modelo': ['investg'],
+'mk':  ['funda', 'analisis'],
+'ingles3': ['ingles2'],
+'ing2': ['tecg'],
+'taller4': ['meca3', 'funda', 'analisis', 'invetg', 'ingles2'],
+'pp': ['funda'],
+'producion': ['modelo'],
+'gestion1': ['admi'],
+'ingles4': ['ingles3'],
+'teoria': ['ing2'],
+'taller5': ['meca3', 'funda', 'analisis', 'invetg', 'ingles2'],
+'eva': ['pp'] ,
+'procesos': ['produccion'],
+'gestion2': ['admi', 'conta'],
+'derecho':  ['admi', 'conta'],
+'sistema':  ['teoria'],
+'taller6':  ['tecg', 'admi', 'conta', 'modelo', 'mk', 'ingles3'],
+'gestion3': ['eva'],
+'gestion4': ['procesos'],
+'direc': ['gestion2'],
+'pr': ['procesos'],
+'proyecto1': ['sistema', taller6', 'gestion3', 'gestion4', 'direc', 'pr'],
+'elec1': ['ing2', 'taller4', 'pp', 'producion', 'gestion1', 'ingles4'],
+'elec2': ['ing2', 'taller4', 'pp', 'producion', 'gestion1', 'ingles4'] ,
+'proyecto2': ['proyecto1'],
+'elec3': ['ing2', 'taller4', 'pp', 'producion', 'gestion1', 'ingles4'],
+'elec4': ['ing2', 'taller4', 'pp', 'producion', 'gestion1', 'ingles4'],
+};
+
+/ Funciones para guardar y cargar progreso en localStorage
+function obtenerAprobados() {
+  const data = localStorage.getItem('mallaAprobados');
+  return data ? JSON.parse(data) : [];
+}
+
+function guardarAprobados(aprobados) {
+  localStorage.setItem('mallaAprobados', JSON.stringify(aprobados));
+}
+
+// Calcula el total de créditos de ramos aprobados
+function calcularCreditosAprobados() {
+  const aprobados = obtenerAprobados();
+  return aprobados.reduce((sum, ramo) => sum + (creditos[ramo] || 0), 0);
+}
+
+// Actualiza qué ramos están desbloqueados o bloqueados según prerrequisitos y créditos especiales
+function actualizarDesbloqueos() {
+  const aprobados = obtenerAprobados();
+  const totalCreditos = calcularCreditosAprobados();
+
+  for (const [destino, reqs] of Object.entries(prerequisitos)) {
+    const elem = document.getElementById(destino);
+    if (!elem) continue;
+
+    // Verificar si se cumplen prerrequisitos normales
+    let puedeDesbloquear = reqs.every(r => aprobados.includes(r));
+
+    // Reglas especiales con créditos para ciertos módulos
+    if (destino === 'modulo1') {
+      puedeDesbloquear = totalCreditos >= 90;
+    }
+    if (destino === 'modulo2') {
+      puedeDesbloquear = aprobados.includes('modulo1') && totalCreditos >= 170;
+    }
+    if (destino === 'internado_electivo' || destino === 'internado_electivo1') {
+      puedeDesbloquear = totalCreditos >= 240;
+    }
+
+    if (!elem.classList.contains('aprobado')) {
+      if (puedeDesbloquear) elem.classList.remove('bloqueado');
+      else elem.classList.add('bloqueado');
+    } else {
+      // Si está aprobado, no debe estar bloqueado
+      elem.classList.remove('bloqueado');
+    }
+  }
+}
+
+// Maneja el clic para aprobar o desaprobar un ramo (solo si no está bloqueado)
+function aprobar(e) {
+  const ramo = e.currentTarget;
+  if (ramo.classList.contains('bloqueado')) return;
+
+  ramo.classList.toggle('aprobado');
+
+  const aprobados = obtenerAprobados();
+  if (ramo.classList.contains('aprobado')) {
+    if (!aprobados.includes(ramo.id)) aprobados.push(ramo.id);
+  } else {
+    const idx = aprobados.indexOf(ramo.id);
+    if (idx > -1) aprobados.splice(idx, 1);
+  }
+  guardarAprobados(aprobados);
+
+  actualizarDesbloqueos();
+}
+
+// Al cargar la página, asignar eventos, cargar progreso y actualizar desbloqueos
+window.addEventListener('DOMContentLoaded', () => {
+  const todosRamos = document.querySelectorAll('.ramo');
+
+  const aprobados = obtenerAprobados();
+  todosRamos.forEach(ramo => {
+    if (aprobados.includes(ramo.id)) {
+      ramo.classList.add('aprobado');
+    }
   });
+
+  todosRamos.forEach(ramo => {
+    ramo.addEventListener('click', aprobar);
+  });
+
+  actualizarDesbloqueos();
 });
+
+
+
+
+
+
+
+
+
+
+
+
