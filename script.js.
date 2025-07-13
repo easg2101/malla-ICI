@@ -111,7 +111,7 @@ const prerequitos = {
 'gestion4': ['procesos'],
 'direc': ['gestion2'],
 'pr': ['procesos'],
-'proyecto1': ['sistema', taller6', 'gestion3', 'gestion4', 'direc', 'pr'],
+'proyecto1': ['sistema', 'taller6', 'gestion3', 'gestion4', 'direc', 'pr'],
 'elec1': ['ing2', 'taller4', 'pp', 'producion', 'gestion1', 'ingles4'],
 'elec2': ['ing2', 'taller4', 'pp', 'producion', 'gestion1', 'ingles4'] ,
 'proyecto2': ['proyecto1'],
